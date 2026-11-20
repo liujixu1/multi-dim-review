@@ -17,7 +17,7 @@
 模型说「这里有问题」很容易，难的是**这句话值不值得相信**。本项目用三条机械规则兜底：
 
 | 约束 | 解决的问题 |
-|---|---|
+| --- | --- |
 | **行号反查** | 模型会编造合理但不存在的文件/行号。落在真实改动附近（容差 3 行）才算 `verified`，否则降级为 `low`，**永不参与门禁** |
 | **维度由编排器写入** | 不采信模型自报的 `dimension`，防止串维度刷分 |
 | **严重度归一** | `critical/major/nit/P0` 统一映射到 `blocker/high/medium/low`，否则换个措辞就绕过门禁 |
@@ -49,7 +49,7 @@ node scripts/review.mjs --base origin/main --head HEAD
 ### 退出码
 
 | 码 | 含义 |
-|---|---|
+| --- | --- |
 | `0` | 通过 |
 | `1` | 有**已验证**的 blocker/high，应阻断合并 |
 | `2` | 评审无法执行（参数/提示词/模型配置问题），或 `--fail-closed` 下的降级 |
@@ -78,8 +78,6 @@ export AI_REVIEW_MODEL_ARCH="cheap-model"
 
 同一份文件放到 `~/.claude/skills/multi-dim-review/` 即可 —— 两边都遵循
 [Agent Skills 规范](https://agentskills.io/specification)。
-
-也可以用 Cursor 的 **Customize → From GitHub Repository** 直接导入本仓库的 plugin。
 
 ---
 
