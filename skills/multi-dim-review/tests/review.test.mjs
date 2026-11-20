@@ -6,6 +6,8 @@ import { test } from 'node:test'
 
 import {
   DIMENSIONS,
+  DISPLAY_NAME,
+  DISPLAY_NAMES,
   LINE_TOLERANCE,
   PromptMissing,
   buildDiffText,
@@ -17,6 +19,7 @@ import {
   normalizePath,
   parseDiff,
   parseFailOn,
+  renderMarkdown,
   resolveModel,
   shouldSkip,
   sortFindings,
@@ -325,4 +328,30 @@ test('所有维度提示词都存在且要求 JSON', () => {
     assert.ok(text.includes('"findings"'), `${dim} 未要求输出 findings`)
     assert.ok(text.toLowerCase().includes('diff'), `${dim} 未提及 diff`)
   }
+})
+
+test('DISPLAY_NAME 向后兼容且支持英文', () => {
+  assert.equal(DISPLAY_NAME.logic, '逻辑正确性')
+  assert.equal(DISPLAY_NAMES.en.logic, 'Logic Correctness')
+  assert.equal(DISPLAY_NAME.en.logic, 'Logic Correctness')
+})
+
+test('所有维度英文提示词都存在且要求 JSON', () => {
+  for (const dim of DIMENSIONS) {
+    const text = loadPrompt(dim, null, 'en')
+    assert.ok(text.includes('"findings"'), `英文 ${dim} 未要求输出 findings`)
+    assert.ok(text.toLowerCase().includes('diff'), `英文 ${dim} 未提及 diff`)
+  }
+})
+
+test('renderMarkdown 支持英文输出', () => {
+  const meta = { generated_at: '2026-01-01', base: 'main', head: 'HEAD', file_count: 1, reviewed_files: ['a.ts'] }
+  const results = [{ dimension: 'logic', model: 'test-model', error: '', elapsed: 1.0 }]
+  const findings = [{ dimension: 'logic', file: 'a.ts', line: 10, severity: 'blocker', title: 'NPE', detail: 'd', suggestion: 's', verified: true }]
+  const gate = { verdict: 'BLOCKED', blocked: true, fail_on: 'blocker', counts: { blocker: 1, high: 0, medium: 0, low: 0 } }
+  const md = renderMarkdown(meta, results, findings, gate, 'en')
+  assert.ok(md.includes('# AI Multi-Dimension Code Review Report'))
+  assert.ok(md.includes('Verdict: **BLOCKED**'))
+  assert.ok(md.includes('Logic Correctness'))
+  assert.ok(md.includes('Gating Verdict'))
 })

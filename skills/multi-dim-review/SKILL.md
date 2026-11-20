@@ -76,6 +76,7 @@ node scripts/review.mjs --base origin/main --dimensions security,logic
 | `--max-chars` | `60000` | 送入模型的 diff 总预算 |
 | `--per-file-chars` | `8000` | 单文件预算，超出按 hunk 边界截断 |
 | `--prompt-dir` | 脚本同级 `prompts/` | 提示词目录（CI 里指向受信任副本） |
+| `--lang` | `zh` | 输出语言（`zh` 或 `en`），也受 `AI_REVIEW_LANG` 控制 |
 | `--dry-run` | — | 只打印规模，不调模型 |
 
 ### 分级模型（按风险分配算力）

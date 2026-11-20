@@ -1,5 +1,7 @@
 # Multi-dimension Code Review
 
+[English](README.en.md) | [简体中文](README.md)
+
 > 给 AI 代码评审加上「可信」这件事：**结论必须能被机器验证，而不只是提示词写得好。**
 
 对一批代码改动做四个视角的独立评审（逻辑 / 安全 / 性能 / 架构），
@@ -42,6 +44,9 @@ node scripts/review.mjs --base origin/main --dry-run
 
 # 正式评审
 node scripts/review.mjs --base origin/main --head HEAD
+
+# 英文报告与日志输出（默认 zh）
+node scripts/review.mjs --base origin/main --head HEAD --lang en
 ```
 
 报告输出到 `.ai-review/`（已建议加入 `.gitignore`）。
